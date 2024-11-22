@@ -2,10 +2,12 @@ package model
 
 import (
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Area struct {
-	ID        uint      `json:"area_id"`
+	gorm.Model
 	Name      string    `json:"area_name"`
 	Location  string    `json:"location"`
 	CreatedAt time.Time `json:"timestamp"`

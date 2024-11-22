@@ -1,6 +1,8 @@
 package model
 
+import "gorm.io/gorm"
+
 type UserRole struct {
-	ID   uint   `gorm:"primary_key" json:"role_id"`
+	gorm.Model
 	Name string `json:"role_name"`
 }
