@@ -1,21 +1,23 @@
 package pg
 
 import (
-    "context"
-    "log"
-    "github.com/jackc/pgx/v5/pgxpool"
+	"log"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-func ConnectToDb() *pgxpool.Pool{
-	connectionURL := "postgres://admin:password@localhost:5432/smart_bin"
-	conn, err := pgxpool.New(context.Background(), connectionURL)
-	if err != nil {
-		log.Fatalf("Unable to Connect to database: %v\n", err)
-	}
-	log.Println("Connected to the PostgreSQL database!")
-    return conn
-}
+func connect() *gorm.DB {
+	dsn := "host=localhost user=admin password=password dbname=smart_bin port=5432 sslmode=disable"
 
+	// Open a connection to the PostgreSQL database
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Failed to connect to the database: %v", err)
+	}
+	return db
+
+}
 
 // Testing Postgres Connection
 // func main(){
