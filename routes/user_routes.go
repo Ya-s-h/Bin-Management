@@ -7,5 +7,6 @@ import (
 )
 
 func UserSetupRoutes(app *fiber.App) {
-	app.Post("/api/user", controllers.CreateUser)
+	app.Post("/api/create/user", controllers.CreateUser)
+	app.Post("/api/update/user", controllers.UpdateUser)
 }
