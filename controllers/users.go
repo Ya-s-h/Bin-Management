@@ -70,3 +70,30 @@ func UpdateUser(fiber_context *fiber.Ctx) error {
 	// fmt.Println(existingUser)
 	return fiber_context.Status(200).JSON(existingUser)
 }
+
+func DeleteUser(fiber_context *fiber.Ctx) error {
+	id := fiber_context.Query("id")
+	fmt.Println("Here")
+	user := new(models.User)
+	db := database.ConnectToDb()
+	if err := fiber_context.BodyParser(user); err != nil {
+		return fiber_context.Status(400).JSON(fiber.Map{
+			"error": "Invalid Format",
+		})
+	}
+	var existingUser models.User
+	if err := db.First(&existingUser, "id = ?", id).Error; err != nil {
+		return fiber_context.Status(404).JSON(fiber.Map{
+			"error": "User not found",
+		})
+	}
+
+	// Update the record with new data
+	if err := db.Delete(&existingUser).Error; err != nil {
+		return fiber_context.Status(500).JSON(fiber.Map{
+			"error": "Failed to delete user",
+		})
+	}
+	// fmt.Println(existingUser)
+	return fiber_context.Status(200).JSON(existingUser)
+}
