@@ -1,7 +1,9 @@
 package model
 
+import "gorm.io/gorm"
+
 type Waste struct {
-	ID          uint   `json:"waste_id"`
+	gorm.Model
 	CollectedAt string `json:"timestamp"`
 	BinID       int    `json:"bin_id"`
 	Weight      int    `json:"weight_in_kgs"`
