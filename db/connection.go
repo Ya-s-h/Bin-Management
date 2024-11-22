@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func connect() *gorm.DB {
+func ConnectToDb() *gorm.DB {
 	dsn := "host=localhost user=admin password=password dbname=smart_bin port=5432 sslmode=disable"
 
 	// Open a connection to the PostgreSQL database
