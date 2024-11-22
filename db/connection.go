@@ -1,4 +1,5 @@
-package main
+package pg
+
 import (
     "context"
     "log"
@@ -29,6 +30,5 @@ func ConnectToDb() *pgxpool.Pool{
 // 	if err := db.Ping(context.Background()); err != nil {
 // 		log.Fatalf("Ping to the database failed: %v\n", err)
 // 	}
-
 //     log.Println(result)
 // }
