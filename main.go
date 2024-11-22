@@ -11,7 +11,7 @@ import (
 func main() {
 	app := fiber.New()
 	pg.ConnectToDb()
-	route.SetupRoutes(app)
+	route.UserSetupRoutes(app)
 	log.Fatal(app.Listen(":3000"))
 
 }
