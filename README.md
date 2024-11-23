@@ -80,3 +80,73 @@ Payload:
 
 }
 ```
+### Create Bin `POST` `/api/create/bin`
+Payload:
+```json
+{
+	
+	area_id: int,
+	user_id: int,
+
+}
+```
+
+### Delete Bin `POST` `/api/delete/bin`
+Payload:
+```json
+{
+	bin_id: int,
+}
+```
+
+
+### Assign bin to area `POST` `/api/assign_bin/area`
+Payload:
+```json
+{
+	bin_id: int,
+	area_id: int
+
+}
+```
+
+### Assign bin to user `POST` `/api/assign_bin/user`
+Payload:
+```json
+{
+	bin_id: int,
+	user_id: int
+
+}
+```
+
+
+### Create Area `POST` `/api/create/area`
+Payload:
+```json
+{
+	name: str,
+	location: str,
+	user_id: int,
+
+}
+```
+
+### Delete Area `POST` `/api/delete/area`
+Payload:
+```json
+{
+	area_id: int,
+}
+```
+
+
+### Assign area to user `POST` `/api/assign_area/user`
+Payload:
+```json
+{
+	user_id: int,
+	area_id: int
+
+}
+```
