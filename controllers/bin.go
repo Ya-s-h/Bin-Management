@@ -3,7 +3,6 @@ package controller
 import (
 	database "assignment/renie/db"
 	models "assignment/renie/models"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,22 +15,35 @@ func CreateBin(fiber_context *fiber.Ctx) error {
 			"error": "Invalid Format",
 		})
 	}
+	if new_bin.BinOwner != (models.User{}) {
+		if new_bin.BinOwner.Role.ID < 3 {
+			return fiber_context.Status(400).JSON(fiber.Map{
+				"error": "User Can't Own Bin",
+			})
+		}
+	}
+
 	result := connection.Create(&new_bin)
 	if err := result.Error; err != nil {
-		return err
+		return fiber_context.Status(500).JSON(fiber.Map{
+			"error": "Failed to create Bin",
+		})
 	}
 	return fiber_context.Status(200).JSON(new_bin)
 }
 
 func DeleteBin(fiber_context *fiber.Ctx) error {
-	id := fiber_context.Query("id")
-	new_bin := new(models.Bin)
-	db := database.ConnectToDb()
-	if err := fiber_context.BodyParser(new_bin); err != nil {
-		return fiber_context.Status(400).JSON(fiber.Map{
-			"error": "Invalid Format",
+	payload := struct {
+		BinID uint `json:"bin_id"`
+	}{}
+	if err := fiber_context.BodyParser(&payload); err != nil {
+		return fiber_context.Status(404).JSON(fiber.Map{
+			"error": err,
 		})
 	}
+	id := payload.BinID
+	db := database.ConnectToDb()
+
 	var existingBin models.Bin
 	if err := db.First(&existingBin, "id = ?", id).Error; err != nil {
 		return fiber_context.Status(404).JSON(fiber.Map{
@@ -46,17 +58,6 @@ func DeleteBin(fiber_context *fiber.Ctx) error {
 		})
 	}
 	return fiber_context.Status(200).JSON(existingBin)
-}
-
-func stringToUint(str string) (uint, error) {
-	// Parse the string as a 64-bit integer
-	val, err := strconv.ParseUint(str, 10, 64)
-	if err != nil {
-		return 0, err
-	}
-
-	// Convert to uint and return
-	return uint(val), nil
 }
 
 func AssignBinToArea(fiber_context *fiber.Ctx) error {
@@ -94,6 +95,7 @@ func AssignBinToArea(fiber_context *fiber.Ctx) error {
 	}
 
 	existingBin.AreaID = areaID
+	existingBin.BinArea = existingArea
 	if err := db.Save(&existingBin).Error; err != nil {
 		return fiber_context.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to assign bin to area",
@@ -115,6 +117,7 @@ func AssignBinToUser(fiber_context *fiber.Ctx) error {
 	bin_id := payload.BinID
 	userID := payload.UserID
 	var existingBin models.Bin
+	var existingUser models.User
 	db := database.ConnectToDb()
 
 	if err := db.First(&existingBin, "id = ?", bin_id).Error; err != nil {
@@ -122,12 +125,18 @@ func AssignBinToUser(fiber_context *fiber.Ctx) error {
 			"error": "Bin not found",
 		})
 	}
-	if existingBin.BinOwner.RoleID < 3 {
+	if err := db.First(&existingUser, "id = ?", userID).Error; err != nil {
+		return fiber_context.Status(404).JSON(fiber.Map{
+			"error": "User not found",
+		})
+	}
+	if existingBin.BinOwner.Role.ID < 3 {
 		return fiber_context.Status(400).JSON(fiber.Map{
 			"error": "User Can't Own Bin",
 		})
 	}
 	existingBin.UserID = userID
+	existingBin.BinOwner = existingUser
 	if err := db.Save(&existingBin).Error; err != nil {
 		return fiber_context.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to assign bin to user",
