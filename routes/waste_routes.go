@@ -7,5 +7,5 @@ import (
 )
 
 func WasteSetupRoutes(app *fiber.App) {
-	app.Post("/api/init/db", controllers.AddWaste)
+	app.Post("/api/add/waste", controllers.AddWaste)
 }
