@@ -25,6 +25,7 @@ func main() {
 	route.DbSetupRoutes(app)
 	route.BinSetupRoutes(app)
 	route.WasteSetupRoutes(app)
+	route.AreaSetupRoutes(app)
 	log.Fatal(app.Listen(":3000"))
 
 }
