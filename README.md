@@ -45,7 +45,7 @@ The Bin Management System is a backend application designed to efficiently manag
 
 
 ## APIs
-### Create User `/api/create/user`
+### Create User `POST` `/api/create/user`
 Payload:
 ```json
 {
@@ -53,6 +53,30 @@ Payload:
 	role_id: int,
 	email_address: str,
 	password: str,
+
+}
+```
+
+### Delete User `POST` `/api/delete/user?user_id={}`
+
+### Update User `POST` `/api/update/user?user_id={}`
+Payload:
+```json
+{
+	username: str,
+	role_id: int,
+	email_address: str,
+	password: str,
+
+}
+```
+
+### Add Waste `POST` `/api/add/waste`
+Payload:
+```json
+{
+	bin_id: int,
+	weight_in_kgs: int
 
 }
 ```
