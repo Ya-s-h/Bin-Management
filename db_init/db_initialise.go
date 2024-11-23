@@ -74,8 +74,8 @@ func seedAreas(db *gorm.DB) {
 
 func seedBins(db *gorm.DB) {
 	bins := []model.Bin{
-		{AreaID: 1, UserID: 2, WasteCollected: 50},
-		{AreaID: 2, UserID: 3, WasteCollected: 100},
+		{AreaID: 1, UserID: 2},
+		{AreaID: 2, UserID: 3},
 	}
 
 	if err := db.Create(&bins).Error; err != nil {
@@ -87,9 +87,9 @@ func seedBins(db *gorm.DB) {
 
 func seedWastes(db *gorm.DB) {
 	wastes := []model.Waste{
-		{BinID: 1, Weight: 20},
+		{BinID: 1, Weight: 21},
 		{BinID: 1, Weight: 30},
-		{BinID: 2, Weight: 50},
+		{BinID: 2, Weight: 59},
 	}
 
 	if err := db.Create(&wastes).Error; err != nil {
