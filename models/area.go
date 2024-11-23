@@ -11,6 +11,6 @@ type Area struct {
 	Name      string    `json:"area_name"`
 	Location  string    `json:"location"`
 	CreatedAt time.Time `json:"timestamp"`
-	AreaOwner User      `gorm:"foreignKey:UserID" json:"area_owned_by"`
+	AreaOwner User      `gorm:"constraint:OnDelete:CASCADE;foreignKey:UserID" json:"area_owned_by"`
 	UserID    uint      `json:"user_id"`
 }
