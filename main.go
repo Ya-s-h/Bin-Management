@@ -22,6 +22,7 @@ func main() {
 
 	pg.ConnectToDb()
 	route.UserSetupRoutes(app)
+	route.DbSetupRoutes(app)
 	log.Fatal(app.Listen(":3000"))
 
 }
