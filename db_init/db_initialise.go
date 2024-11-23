@@ -62,7 +62,7 @@ func seedUsers(db *gorm.DB) {
 func seedAreas(db *gorm.DB) {
 	areas := []model.Area{
 		{Name: "Downtown", Location: "City Center", UserID: 2},
-		{Name: "Uptown", Location: "North City", UserID: 3},
+		{Name: "Uptown", Location: "North City", UserID: 4},
 	}
 
 	if err := db.Create(&areas).Error; err != nil {
@@ -74,7 +74,7 @@ func seedAreas(db *gorm.DB) {
 
 func seedBins(db *gorm.DB) {
 	bins := []model.Bin{
-		{AreaID: 1, UserID: 2},
+		{AreaID: 1, UserID: 4},
 		{AreaID: 2, UserID: 3},
 	}
 

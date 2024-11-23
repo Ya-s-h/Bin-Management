@@ -45,7 +45,6 @@ func DeleteBin(fiber_context *fiber.Ctx) error {
 			"error": "Failed to delete Bin",
 		})
 	}
-	// fmt.Println(existingBin)
 	return fiber_context.Status(200).JSON(existingBin)
 }
 
@@ -61,15 +60,30 @@ func stringToUint(str string) (uint, error) {
 }
 
 func AssignBinToArea(fiber_context *fiber.Ctx) error {
-	bin_id := fiber_context.Query("bin_id")
-	area_id_str := fiber_context.Query("area_id")
+	payload := struct {
+		BinID  uint `json:"bin_id"`
+		AserID uint `json:"area_id"`
+	}{}
+	if err := fiber_context.BodyParser(&payload); err != nil {
+		return fiber_context.Status(404).JSON(fiber.Map{
+			"error": err,
+		})
+	}
+	bin_id := payload.BinID
+	areaID := payload.AserID
 	var existingBin models.Bin
 	db := database.ConnectToDb()
 
-	areaID, err := stringToUint(area_id_str)
-	if err != nil {
-		return fiber_context.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid area_id",
+	// areaID, err := stringToUint(area_id_str)
+	// if err != nil {
+	// 	return fiber_context.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+	// 		"error": "Invalid area_id",
+	// 	})
+	// }
+	var existingArea models.Area
+	if err := db.First(&existingArea, "id = ?", areaID).Error; err != nil {
+		return fiber_context.Status(404).JSON(fiber.Map{
+			"error": "Invalid Area ID",
 		})
 	}
 
@@ -89,28 +103,34 @@ func AssignBinToArea(fiber_context *fiber.Ctx) error {
 }
 
 func AssignBinToUser(fiber_context *fiber.Ctx) error {
-	bin_id := fiber_context.Query("bin_id")
-	user_id_str := fiber_context.Query("area_id")
+	payload := struct {
+		BinID  uint `json:"bin_id"`
+		UserID uint `json:"user_id"`
+	}{}
+	if err := fiber_context.BodyParser(&payload); err != nil {
+		return fiber_context.Status(404).JSON(fiber.Map{
+			"error": err,
+		})
+	}
+	bin_id := payload.BinID
+	userID := payload.UserID
 	var existingBin models.Bin
 	db := database.ConnectToDb()
 
-	userID, err := stringToUint(user_id_str)
-	if err != nil {
-		return fiber_context.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid area_id",
-		})
-	}
-
 	if err := db.First(&existingBin, "id = ?", bin_id).Error; err != nil {
-		return fiber_context.Status(404).JSON(fiber.Map{
+		return fiber_context.Status(400).JSON(fiber.Map{
 			"error": "Bin not found",
 		})
 	}
-
+	if existingBin.BinOwner.RoleID < 3 {
+		return fiber_context.Status(400).JSON(fiber.Map{
+			"error": "User Can't Own Bin",
+		})
+	}
 	existingBin.UserID = userID
 	if err := db.Save(&existingBin).Error; err != nil {
 		return fiber_context.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to assign bin to area",
+			"error": "Failed to assign bin to user",
 		})
 	}
 	return fiber_context.Status(200).JSON(existingBin)
