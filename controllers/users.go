@@ -73,7 +73,6 @@ func UpdateUser(fiber_context *fiber.Ctx) error {
 
 func DeleteUser(fiber_context *fiber.Ctx) error {
 	id := fiber_context.Query("id")
-	fmt.Println("Here")
 	user := new(models.User)
 	db := database.ConnectToDb()
 	if err := fiber_context.BodyParser(user); err != nil {
