@@ -73,13 +73,13 @@ func UpdateUser(fiber_context *fiber.Ctx) error {
 
 func DeleteUser(fiber_context *fiber.Ctx) error {
 	id := fiber_context.Query("id")
-	user := new(models.User)
+	// user := new(models.User)
 	db := database.ConnectToDb()
-	if err := fiber_context.BodyParser(user); err != nil {
-		return fiber_context.Status(400).JSON(fiber.Map{
-			"error": "Invalid Format",
-		})
-	}
+	// if err := fiber_context.BodyParser(user); err != nil {
+	// 	return fiber_context.Status(400).JSON(fiber.Map{
+	// 		"error": "Invalid Format",
+	// 	})
+	// }
 	var existingUser models.User
 	if err := db.First(&existingUser, "id = ?", id).Error; err != nil {
 		return fiber_context.Status(404).JSON(fiber.Map{

@@ -52,20 +52,20 @@ func DeleteArea(fiber_context *fiber.Ctx) error {
 	id := payload.AreaID
 	db := database.ConnectToDb()
 
-	var existingBin models.Bin
-	if err := db.First(&existingBin, "id = ?", id).Error; err != nil {
+	var existingArea models.Area
+	if err := db.First(&existingArea, "id = ?", id).Error; err != nil {
 		return fiber_context.Status(404).JSON(fiber.Map{
-			"error": "Bin not found",
+			"error": "Area not found",
 		})
 	}
 
 	// Update the record with new data
-	if err := db.Delete(&existingBin).Error; err != nil {
+	if err := db.Delete(&existingArea).Error; err != nil {
 		return fiber_context.Status(500).JSON(fiber.Map{
 			"error": "Failed to delete Bin",
 		})
 	}
-	return fiber_context.Status(200).JSON(existingBin)
+	return fiber_context.Status(200).JSON(existingArea)
 }
 
 func AssingAreaToUser(fiber_context *fiber.Ctx) error {

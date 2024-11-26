@@ -50,7 +50,7 @@ Payload:
 ```json
 {
 	username: str,
-	role_id: int,
+	role_id: int(between 1-4),
 	email_address: str,
 	password: str,
 
@@ -64,7 +64,7 @@ Payload:
 ```json
 {
 	username: str,
-	role_id: int,
+	role_id: int(between 1-4),
 	email_address: str,
 	password: str,
 
@@ -125,7 +125,7 @@ Payload:
 Payload:
 ```json
 {
-	name: str,
+	area_name: str,
 	location: str,
 	user_id: int,
 

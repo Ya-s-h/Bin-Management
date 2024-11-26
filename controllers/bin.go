@@ -22,7 +22,7 @@ func CreateBin(fiber_context *fiber.Ctx) error {
 			})
 		}
 	}
-
+	new_bin.WasteCollected = 0
 	result := connection.Create(&new_bin)
 	if err := result.Error; err != nil {
 		return fiber_context.Status(500).JSON(fiber.Map{
@@ -130,7 +130,8 @@ func AssignBinToUser(fiber_context *fiber.Ctx) error {
 			"error": "User not found",
 		})
 	}
-	if existingBin.BinOwner.Role.ID < 3 {
+
+	if existingUser.RoleID < 3 {
 		return fiber_context.Status(400).JSON(fiber.Map{
 			"error": "User Can't Own Bin",
 		})
